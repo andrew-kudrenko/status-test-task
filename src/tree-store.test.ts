@@ -14,7 +14,11 @@ const SEQUENTAL_ITEMS: TreeStoreItem[] = [
 ];
 
 describe("Tree Store", () => {
-  const store = new TreeStore(SEQUENTAL_ITEMS);
+  let store: TreeStore;
+
+  beforeEach(() => {
+    store = new TreeStore(SEQUENTAL_ITEMS);
+  });
 
   describe("Get All", () => {
     it("An array with equivalent elements ordered the same way", () => {
@@ -56,12 +60,22 @@ describe("Tree Store", () => {
   });
 
   describe("Get descendents by id", () => {
+    it("Persistance between requests", () => {
+      const id = 2;
+
+      const before = store.getChildren(id);
+      void store.getDescendants(id);
+      const after = store.getChildren(id);
+
+      expect(before).toStrictEqual(after);
+    });
+
     it("Using non-existing id will produce an empty array", () => {
-      expect(store.getChildren(69)).toEqual([]);
+      expect(store.getDescendants(69)).toEqual([]);
     });
 
     it("An empty array if there are no children", () => {
-      expect(store.getChildren(5)).toEqual([]);
+      expect(store.getDescendants(5)).toEqual([]);
     });
 
     it("Picking children recursively", () => {

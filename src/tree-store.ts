@@ -30,7 +30,7 @@ export class TreeStore {
   }
 
   public getChildren(id: TreeStoreId): TreeStoreItem[] {
-    return this.adjacencies.get(id)?.children ?? [];
+    return this.adjacencies.has(id) ? [...this.adjacencies.get(id)!.children] : [];
   }
 
   public getDescendants(id: TreeStoreId): TreeStoreItem[] {
